@@ -1,5 +1,13 @@
+import moment from 'moment';
+
 //The filter Reducer
-const filtersReducerDefultState = {text: '', sortBy: 'date', startDate: undefined, endDate: undefined};
+const filtersReducerDefultState = {
+    text: '',
+    sortBy: 'date', 
+    startDate: moment().startOf('month'),
+    endDate: moment().endOf('month')
+};
+
 export default (state = filtersReducerDefultState , action) =>{
     switch(action.type){
         case 'SET_TEXT_FILTER':

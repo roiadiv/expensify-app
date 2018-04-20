@@ -6,14 +6,17 @@ import selectorExpense from '../selectors/expenses';
 //This component dosnt neew any more to worry or storge a state,
 //He rerender by using redux store
 //all we need to do to is decide how we want to render this compoennet to that screen
-const ExpenseList = (props)=>(
+export const ExpenseList = (props)=>(
     <div>
-    <h1>Expense List</h1>
-    {
-          props.expenses.map((expense) => {
-              return <ExpenseListItem key = {expense.id} {...expense} />
-          })
-    }
+        {
+            props.expenses.length === 0 ? (
+                <p>No expenses</p>
+            ) : (
+                props.expenses.map((expense) => {
+                    return <ExpenseListItem key = {expense.id} {...expense} />
+                })
+            )
+        }
     </div>   
 );
 
