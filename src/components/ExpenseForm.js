@@ -7,8 +7,8 @@ import { SingleDatePicker } from 'react-dates';//component we gonna use
 //moment is the stadart for date data
 
 //we get an  insatnse of moment
-const now = moment();
-console.log(now.format('MMM Do, YYYY'));
+// const now = moment();
+// console.log(now.format('MMM Do, YYYY'));
 
 
 export default class ExpenseForm extends React.Component{
