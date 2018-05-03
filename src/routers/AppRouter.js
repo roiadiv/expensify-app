@@ -8,7 +8,7 @@ import HelpPage from '../components/HelpPage';
 import LoginPage from '../components/LoginPage';
 import NotFoundPage from '../components/NotFoundPage';
 import PrivateRout from './PrivateRout';
-
+import PublicRout from './PublicRout';
 //now we acsses to history in any place we want
 export const history = createHistory();
 
@@ -19,7 +19,7 @@ const AppRouter = ()=>(
     <Router history = {history}>
     <div>
         <Switch> 
-        <Route path = '/' component = {LoginPage} exact ={true}/>   
+        <PublicRout path = '/' component = {LoginPage} exact ={true}/>   
         <PrivateRout path = '/dashboard' component = {ExpenseDashboardPage} />  
         <PrivateRout path = '/create' component = {AddExpensePage} />
         <PrivateRout path = '/edit/:id' component = {EditExpensePage} />

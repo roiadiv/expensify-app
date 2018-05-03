@@ -6,6 +6,8 @@ import database from '../../firebase/firebase';
 
 //we call configureMockStore with array of midllwere we gonna use
 const craeteMockStore = configureMockStore([thunk]);
+const uid = "thisismyfakeuid";
+const defaultAuthState = {auth:{uid}};
 
 beforeEach((done)=>{
     const expensesData = {};
@@ -13,7 +15,7 @@ beforeEach((done)=>{
         expensesData[id] = {description,note, amount, createdAt};
         
     })
-    database.ref('expenses').set(expensesData).then(()=> done());
+    database.ref(`users/${uid}/expenses`).set(expensesData).then(()=> done());
 })
 
 //toBe will fail becuse when we try equal to objects : {}==={} the resoult is false
@@ -27,14 +29,14 @@ test('should setup remove expense action object',()=>{
 });
 
 test('should remove expense from firebase',(done)=>{
-    const store = craeteMockStore({});
+    const store = craeteMockStore(defaultAuthState);
     store.dispatch(startRemoveExpense({id:expenses[1].id})).then(()=>{
         const actions = store.getActions();//return an array of our actions
         expect(actions[0]).toEqual({
             type:'REMOVE_EXPENSE',
             id:expenses[1].id
         });
-        return database.ref(`expenses/${expenses[1].id}`).once('value');
+        return database.ref(`users/${uid}/expenses/${expenses[1].id}`).once('value');
     }).then((snapshot)=>{
         expect(snapshot.val()).toBeFalsy();
         done();
@@ -62,8 +64,7 @@ test('should setup add expense action object with provided values',()=>{
 
 //done is for Async test - until we call done the test is not over
 test('should add expense to database and store',(done)=>{
-    const store = craeteMockStore({
-    });
+    const store = craeteMockStore(defaultAuthState);
     const expenseData = {
         description:'Mouse',
         amount:3000,
@@ -72,7 +73,7 @@ test('should add expense to database and store',(done)=>{
 
     }
     store.dispatch(startAddExpense(expenseData)).then(()=>{
-        const actions = store.getActions()//return an array of our actions
+        const actions = store.getActions({auth:{uid}})//return an array of our actions
         expect(actions[0]).toEqual({
             type:'ADD_EXPENSE',
             expense:{
@@ -80,7 +81,7 @@ test('should add expense to database and store',(done)=>{
                 ...expenseData
             }
         });
-        return database.ref(`expenses/${actions[0].expense.id}`).once('value');
+        return database.ref(`users/${uid}/expenses/${actions[0].expense.id}`).once('value');
     }).then((snapshot)=>{
         expect(snapshot.val()).toEqual(expenseData);
         done();
@@ -88,8 +89,7 @@ test('should add expense to database and store',(done)=>{
 });
 
 test('should add expense with defaults to database and store',(done)=>{
-    const store = craeteMockStore({
-    });
+    const store = craeteMockStore(defaultAuthState);
     const expenseData = {
         description:'',
         amount: 0,
@@ -105,7 +105,7 @@ test('should add expense with defaults to database and store',(done)=>{
                 ...expenseData
             }
         });
-        return database.ref(`expenses/${actions[0].expense.id}`).once('value');
+        return database.ref(`users/${uid}/expenses/${actions[0].expense.id}`).once('value');
     }).then((snapshot)=>{
         expect(snapshot.val()).toEqual(expenseData);
         done();
@@ -121,7 +121,7 @@ test('should setup set expense action object with data',()=>{
 });
 
 test('should fetch the expenses from firebase',(done)=>{
-    const store = craeteMockStore({});
+    const store = craeteMockStore(defaultAuthState);
     store.dispatch(startSetExpenses()).then(()=>{
         const actions = store.getActions();//return an array of our actions
         expect(actions[0]).toEqual({
@@ -135,7 +135,7 @@ test('should fetch the expenses from firebase',(done)=>{
 test('should edit expense from firebase',(done)=>{
     const id = expenses[1].id;
     const updates = {note: 'work!'};
-    const store = craeteMockStore({});
+    const store = craeteMockStore(defaultAuthState);
     store.dispatch(startEditExpense(id, updates)).then(()=>{
         const actions = store.getActions();//return an array of our actions
         expect(actions[0]).toEqual({
@@ -143,7 +143,7 @@ test('should edit expense from firebase',(done)=>{
             id,
             updates
         });
-        return database.ref(`expenses/${id}`).once('value');
+        return database.ref(`users/${uid}/expenses/${id}`).once('value');
     }).then((snapshot)=>{
         expect(snapshot.val().note).toBe('work!');
        done();
