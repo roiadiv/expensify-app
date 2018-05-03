@@ -13,11 +13,12 @@ const config = {
     messagingSenderId: process.env.FIREBASE_MASSAGING_SENDER_ID
   };
   
-  firebase.initializeApp(config);
+firebase.initializeApp(config);
 
-  const database = firebase.database();
+const database = firebase.database();
+const googleAuthProvider = new firebase.auth.GoogleAuthProvider();
 
-export { firebase, database as default };
+export { firebase,googleAuthProvider ,database as default };
 
 //in Addtion to 'value' event:
 // database.ref('expenses').on('child_removed',(snapshot)=>{
