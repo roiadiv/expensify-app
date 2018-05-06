@@ -7,16 +7,25 @@ import selectorExpense from '../selectors/expenses';
 //He rerender by using redux store
 //all we need to do to is decide how we want to render this compoennet to that screen
 export const ExpenseList = (props)=>(
-    <div>
+    <div className = "content-container">
+        <div className= "list-header">
+          <div className = "show-for-mobile">Expenses</div>
+          <div className = "show-for-desktop">Expens</div>
+          <div className = "show-for-desktop">Amount</div>
+        </div>
+        <div className = "list-budy">
         {
             props.expenses.length === 0 ? (
-                <p>No expenses</p>
+                <div class="list-item list-item--massage">
+                    <span>No expenses</span>
+                </div>
             ) : (
                 props.expenses.map((expense) => {
                     return <ExpenseListItem key = {expense.id} {...expense} />
                 })
             )
         }
+        </div>
     </div>   
 );
 

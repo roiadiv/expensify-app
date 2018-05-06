@@ -1,10 +1,16 @@
+*{
+    box-sizing:border-box //content-box bt defualte
+}
+
 html{
     font-size:62.5%;//make us to work with rem with base 10 and not 16
 }
 
 body{
+    color :$dark-grey;
     font-family:  Arial, Helvetica, sans-serif;
     font-size: $m-size;// translte to 16px
+    line-height: 1.6;
 }
 
 button{
